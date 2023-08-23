@@ -1,0 +1,74 @@
+###################
+# compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.pdb
+*.dll.config
+*.cache
+*.suo
+*.user
+
+###############
+# Directories #
+###############
+bin/
+obj/
+TestResults/
+bin/
+obj/
+TestResults/
+.vs/
+Logs/
+/src/packages
+
+###################
+# compiled output #
+###################
+dist/
+build/
+/dist-server
+/tmp
+/out-tsc
+
+################
+# dependencies #
+################
+node_modules/
+
+####################
+# IDEs and editors #
+####################
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+.vscode/
+
+########
+# misc #
+########
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+#######
+# e2e #
+#######
+/e2e/*.js
+/e2e/*.map
+
+################
+# System Files #
+################
+.DS_Store
+Thumbs.db
