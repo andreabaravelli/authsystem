@@ -15,6 +15,7 @@
 
 
 
+
 <input type="text" id="searchInput" placeholder="Cerca...">
 
 <select id="combobox" onchange="myFunction()" >
@@ -26,23 +27,23 @@
 </select >
 
 <p id="demo"></p>
-<button id="customButton" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="Book()" disabled>Prenota</button>
+
 <script>
 
-    function myFunction() {
+    function myFunction() {                                             // this function is useful to change the svg image when we click on an option of the combobox.
   
   var x = document.getElementById("combobox").value;
 
   document.getElementById("demo").innerHTML = "You selected: " + x;
 
-     var options = @Html.Raw(Json.Serialize(Model)); // Json string
+     var options = @Html.Raw(Json.Serialize(Model));                    // Json string
     
 
-     options.forEach((item)=>{// foreach on options which has the model list values 
+     options.forEach((item)=>{                                          // foreach on options which has the model list values 
       
        if(item.descrizione ==x){
            var container = document.getElementById("svgContainer");
-           container.innerHTML= item.immagineSvg;// here we visualize the svg image
+           container.innerHTML= item.immagineSvg;                       // here we visualize the svg image
             
        } 
       });
@@ -53,9 +54,9 @@
    
     $(document).ready(function () {
         var comboBox = $("#combobox");
-        var customButton = $("#customButton");
+       
         var searchInput = $("#searchInput");
-        window.postoSelezionato='';
+      
        
         // execute the filter when the user types an input.
         searchInput.on("input", function () {
@@ -67,12 +68,7 @@
             });
         });
 
-        $('circle[id^="PS"]').on("click",function(){
-            window.postoSelezionato= $(this).attr('id');
-         
-           Book(window.postoSelezionato);
-        console.log(window.postoSelezionato);
-        });
+      
 
        function Book(postoSelezionato){// in this method we have to write the book
               var x = document.getElementById("combobox").value;
@@ -93,12 +89,12 @@
        }
 
        function SendData(item){
-        var dataToSend = JSON.stringify(item);
+
         debugger;
         $.ajax({
             type: "POST",
             
-            url: '@Url.Action("GetSeat", "Sede")',
+            url: '@Url.Action("Reserve", "Prenotazioni")',
           // url:"/Sede/GetSeat/?data=dataToSend"
             data:  item,
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
@@ -145,6 +141,7 @@
          
 </script>
 
+
     <table id="SediTable" class="display" style="width:100%">
         <thead>
             <tr>
@@ -172,6 +169,42 @@
             </tr>
         </tfoot>
     </table>
+
+    <script>// datepicker
+   
+    $(function () {
+    $(".datefield").datepicker({
+      dateFormat: 'dd-mm-yy',
+    numberOfMonths: 1,
+    onSelect: function(selected,evnt) {
+         GetDate(selected);
+    }
+    }); 
+});
+
+    function GetDate(value){     
+  var date = $('#BookDate').val(value);
+    window.postoSelezionato='';
+
+     $('circle[id^="PS"]').on("click",function(){
+           
+            if(date != null){                                       // this check that the user has selected a date before to book.
+                  window.postoSelezionato= $(this).attr('id');
+         
+           Book(window.postoSelezionato);
+           console.log("hai prenotato"+window.postoSelezionato+" "date);
+               
+            }else{
+                 console.log("prenota");
+            }
+        });
+}
+
+</script>
+
+    <input class="datefield" data-val="true" data-val-required="Date is required" 
+      id="BookDate" name="BookDate" type="date" value="1/11/1989" />
+
 
 <div id="svgContainer">
 

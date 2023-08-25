@@ -12,8 +12,6 @@
 
         public bool Prenotabile { get; set; }
 
-        public bool? IsPrenotata { get; set; }
-
         public string? ImmagineSvg { get; set; }
 
     }

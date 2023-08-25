@@ -1,4 +1,6 @@
-﻿namespace SeatsProject.Models
+﻿using Microsoft.EntityFrameworkCore;
+using SeatsProject.Models;
+namespace SeatsProject.Models
 {
     using Microsoft.EntityFrameworkCore;
 
@@ -9,5 +11,7 @@
         public SeatsProjectContext(DbContextOptions options) : base(options)
         {
         }
+
+        public DbSet<SeatsProject.Models.Prenotazioni>? Prenotazioni { get; set; }
     }
 }
