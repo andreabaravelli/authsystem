@@ -11,8 +11,24 @@
     <a asp-action="Delete">Delete</a>
     <a asp-action="">Delete All</a>
 </p>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+ <link
+      href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css"
+      rel="stylesheet"
+    />
+
+     <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+      integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
 
 
 
@@ -28,7 +44,8 @@
 
 <p id="demo"></p>
 
-<script>
+<script>// function which converts the object list to a json object
+    var date="";
 
     function myFunction() {                                             // this function is useful to change the svg image when we click on an option of the combobox.
   
@@ -52,12 +69,12 @@
 
    
    
-    $(document).ready(function () {
+    $(document).ready(function () { // here we wait the complete load of the document
         var comboBox = $("#combobox");
        
         var searchInput = $("#searchInput");
       
-       
+      window.postoSelezionato=''; 
         // execute the filter when the user types an input.
         searchInput.on("input", function () {
             var searchText = $(this).val().toLowerCase();
@@ -67,8 +84,6 @@
                 $(this).toggle(optionText.indexOf(searchText) > -1);
             });
         });
-
-      
 
        function Book(postoSelezionato){// in this method we have to write the book
               var x = document.getElementById("combobox").value;
@@ -88,7 +103,7 @@
 
        }
 
-       function SendData(item){
+       function SendData(item){// here we send the data at the controller 
 
         debugger;
         $.ajax({
@@ -136,8 +151,50 @@
          
        });
 
+     
+
+        $('circle[id^="PS"]').on("click",function(){
+            console.log("stai prenotando")
+
+               $('#BookDate').datepicker();
+            var Date2  = $("#BookDate").datepicker("getDate");
+        console.log(Date2);
+            
+        if(Date2!=null){
+          
+           console.log(Date2);
+            window.postoSelezionato= $(this).attr('id');
+           Book(window.postoSelezionato);
+             }else{
+                 console.log("devi scegliere un giorno prima di prenotare");
+                   console.log(Date2);
+             }
+
+       });
+
+
+     
 
     });
+   
+
+    
+    
+    
+//               $(function () {// datepicker
+//    $(".datefield").datepicker({
+//      dateFormat: 'dd-mm-yy',
+//    numberOfMonths: 1,
+//    onSelect: function(selected,evnt) {
+//         GetDate(selected);
+//    }
+//    }); 
+//    function GetDate(value){
+//         date = $('#BookDate').val(value);
+//        window.postoSelezionato='';
+//    }
+//});
+    
          
 </script>
 
@@ -170,40 +227,8 @@
         </tfoot>
     </table>
 
-    <script>// datepicker
-   
-    $(function () {
-    $(".datefield").datepicker({
-      dateFormat: 'dd-mm-yy',
-    numberOfMonths: 1,
-    onSelect: function(selected,evnt) {
-         GetDate(selected);
-    }
-    }); 
-});
-
-    function GetDate(value){     
-  var date = $('#BookDate').val(value);
-    window.postoSelezionato='';
-
-     $('circle[id^="PS"]').on("click",function(){
-           
-            if(date != null){                                       // this check that the user has selected a date before to book.
-                  window.postoSelezionato= $(this).attr('id');
-         
-           Book(window.postoSelezionato);
-           console.log("hai prenotato"+window.postoSelezionato+" "date);
-               
-            }else{
-                 console.log("prenota");
-            }
-        });
-}
-
-</script>
-
     <input class="datefield" data-val="true" data-val-required="Date is required" 
-      id="BookDate" name="BookDate" type="date" value="1/11/1989" />
+      id="BookDate" name="BookDate" type="date" value="1989/11/1" />
 
 
 <div id="svgContainer">

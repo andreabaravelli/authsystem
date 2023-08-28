@@ -21,8 +21,10 @@ namespace SeatsProject.Controllers
         // GET: Prenotazioni
 
 
-        public IActionResult Reserve()
+        public IActionResult Reserve(Sede item)
         {
+         // qui bisogna aggiungere al database la prenotazione.
+
             return View();
         }
         public async Task<IActionResult> Index()
