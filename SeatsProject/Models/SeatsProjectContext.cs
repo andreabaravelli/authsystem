@@ -10,8 +10,14 @@ namespace SeatsProject.Models
 
         public SeatsProjectContext(DbContextOptions options) : base(options)
         {
+            Database.EnsureCreated();
         }
 
-        public DbSet<SeatsProject.Models.Prenotazioni>? Prenotazioni { get; set; }
+        public DbSet<Prenotazioni> Prenotazioni { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
     }
 }
