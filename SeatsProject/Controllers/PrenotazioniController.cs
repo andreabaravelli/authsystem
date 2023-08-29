@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using SeatsProject.Models;
-
-namespace SeatsProject.Controllers
+﻿namespace SeatsProject.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
+    using SeatsProject.Models;
+
     public class PrenotazioniController : Controller
     {
         private readonly SeatsProjectContext _context;
@@ -19,17 +19,22 @@ namespace SeatsProject.Controllers
         }
 
         // GET: Prenotazioni
-
-
         public IActionResult Reserve(Sede item)
         {
          // qui bisogna aggiungere al database la prenotazione.
+         Prenotazioni prenotazione = new Prenotazioni();
+         prenotazione.CodicePostazione = item.CodiceArea;
 
-            return View();
+            // devo aggiungere la data e l'utente
+         _context.Add(prenotazione);
+         _context.SaveChanges();
+
+         return View();
         }
+
         public async Task<IActionResult> Index()
         {
-              return _context.Prenotazioni != null ? 
+              return _context.Prenotazioni != null ?
                           View(await _context.Prenotazioni.ToListAsync()) :
                           Problem("Entity set 'SeatsProjectContext.Prenotazioni'  is null.");
         }
@@ -71,6 +76,7 @@ namespace SeatsProject.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(prenotazioni);
         }
 

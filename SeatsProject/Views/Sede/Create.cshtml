@@ -24,9 +24,20 @@
             </div>
             <div class="form-group">
                 <label asp-for="IdPadre" class="control-label"></label>
-                <input asp-for="IdPadre" class="form-control" />
-                <span asp-validation-for="IdPadre" class="text-danger"></span>
+                
+                <select id="comboBox" onchange="myFunction()>
+                    @foreach (var sede in ViewBag.Seat)
+                    {
+                        <option value="@sede.Descrizione">@sede.Descrizione</option>
+                    }
+
+                </select>
             </div>
+
+            
+
+           
+
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Prenotabile" /> @Html.DisplayNameFor(model => model.Prenotabile)
@@ -45,4 +56,47 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+       
+        $(document).ready(function () {
+
+         GetJsonViewbag();
+
+          
+            
+        });
+        function GetJsonViewbag(){
+
+            var comboBox = $("#comboBox");
+            var y = @Html.Raw(Json.Serialize(ViewBag.Seat));
+
+            $.each(y, function (index, value) {
+                comboBox.append($("<option>").text(value));
+
+        });
+
+        function myFunction() {                                             
+
+            var x = document.getElementById("combobox").value;
+            
+           
+
+            var options = @Html.Raw(Json.Serialize(ViewBag.Seat));                    // Json string
+
+
+            options.forEach((item) => {                                          // foreach on options which has the model list values
+
+                if (item.descrizione == x) {
+                    var fatherId= item.Id;
+                    console.log(fatherId);
+                                 // this is the id of the father selected on the dropdown menu, so this the fatherId 
+                  // I have to set the fatherId of the new Sede
+
+                }
+            });
+
+        }
+
+
+    </script>
 }

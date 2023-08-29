@@ -8,8 +8,7 @@
 
 <p>
     <a asp-action="Create">Create New</a>
-    <a asp-action="Delete">Delete</a>
-    <a asp-action="">Delete All</a>
+ 
 </p>
 
  <link
@@ -110,7 +109,6 @@
             type: "POST",
             
             url: '@Url.Action("Reserve", "Prenotazioni")',
-          // url:"/Sede/GetSeat/?data=dataToSend"
             data:  item,
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 
@@ -156,7 +154,13 @@
         $('circle[id^="PS"]').on("click",function(){
             console.log("stai prenotando")
 
-               $('#BookDate').datepicker();
+               //$('#BookDate').datepicker();
+
+                $(".datefield").datepicker({
+      dateFormat: 'dd-mm-yyyy',
+    numberOfMonths: 1,
+    }); 
+
             var Date2  = $("#BookDate").datepicker("getDate");
         console.log(Date2);
             
@@ -165,22 +169,17 @@
            console.log(Date2);
             window.postoSelezionato= $(this).attr('id');
            Book(window.postoSelezionato);
-             }else{
+            
+        }else{
                  console.log("devi scegliere un giorno prima di prenotare");
                    console.log(Date2);
              }
 
        });
 
-
-     
-
     });
    
 
-    
-    
-    
 //               $(function () {// datepicker
 //    $(".datefield").datepicker({
 //      dateFormat: 'dd-mm-yy',
@@ -228,7 +227,7 @@
     </table>
 
     <input class="datefield" data-val="true" data-val-required="Date is required" 
-      id="BookDate" name="BookDate" type="date" value="1989/11/1" />
+      id="BookDate" name="BookDate" type="date" value="1/11/1989" />
 
 
 <div id="svgContainer">
@@ -367,52 +366,52 @@
      cy="693.33655"
      r="10.836552" /><circle
      style="fill:#ffffff;stroke:#000000"
-     id="path7-0"
+     id="PSD01"
      cx="588.33655"
      cy="634.33655"
      r="10.836552" /><circle
      style="fill:#ffffff;stroke:#000000"
-     id="path7-31"
+     id="PSD10"
      cx="621.33655"
      cy="662.33655"
      r="10.836552" /><circle
      style="fill:#ffffff;stroke:#000000"
-     id="path7-5"
+     id="PSD09"
      cx="648.00195"
      cy="662.22632"
      r="10.836552" /><circle
      style="fill:#ffffff;stroke:#000000"
-     id="path7-44"
+     id="PSD08"
      cx="678.11218"
      cy="663.22632"
      r="10.836552" /><circle
      style="fill:#ffffff;stroke:#000000"
-     id="path7-99"
+     id="PSD06"
      cx="728.33655"
      cy="627.33655"
      r="10.836552" /><circle
      style="fill:#ffffff;stroke:#000000"
-     id="path7-76"
+     id="PSD05"
      cx="698.33655"
      cy="591.33655"
      r="10.836552" /><circle
      style="fill:#ffffff;stroke:#000000"
-     id="path7-35"
+     id="PSD04"
      cx="665.33655"
      cy="591.33655"
      r="10.836552" /><circle
      style="fill:#ffffff;stroke:#000000"
-     id="path7-74"
+     id="PSD03"
      cx="636.33655"
      cy="591.33655"
      r="10.836552" /><circle
      style="fill:#ffffff;stroke:#000000"
-     id="path7-75"
+     id="PSD02"
      cx="611.33655"
      cy="593.33655"
      r="10.836552" /><circle
      style="fill:#ffffff;stroke:#000000"
-     id="path7-97"
+     id="PSD07"
      cx="703.33655"
      cy="662.33655"
      r="10.836552" /></svg>

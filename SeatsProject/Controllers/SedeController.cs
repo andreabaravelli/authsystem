@@ -91,6 +91,8 @@
         // GET: Sede/Create
         public IActionResult Create()
         {
+            var lstSedi= GetSedi();
+            ViewBag.Seat = lstSedi; 
             return View();
         }
 

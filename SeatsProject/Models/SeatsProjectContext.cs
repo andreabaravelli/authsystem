@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SeatsProject.Models;
-namespace SeatsProject.Models
+﻿namespace SeatsProject.Models
 {
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
+    using SeatsProject.Models;
 
     public class SeatsProjectContext : DbContext
     {
