@@ -8,6 +8,17 @@
 
 <h4>Sede</h4>
 <hr />
+<link href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css"
+      rel="stylesheet" />
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+        integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -22,16 +33,14 @@
                 <input asp-for="CodiceArea" class="form-control" />
                 <span asp-validation-for="CodiceArea" class="text-danger"></span>
             </div>
+            
+            
             <div class="form-group">
                 <label asp-for="IdPadre" class="control-label"></label>
-                
-                <select id="comboBox" onchange="myFunction()>
-                    @foreach (var sede in ViewBag.Seat)
-                    {
-                        <option value="@sede.Descrizione">@sede.Descrizione</option>
-                    }
+              <input id="fatherId" asp-for=IdPadre type="hidden" value="ciao " />
 
-                </select>
+                <span asp-validation-for="IdPadre" class="text-danger"></span>
+             
             </div>
 
             
@@ -44,7 +53,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary"/>
             </div>
         </form>
     </div>
@@ -54,43 +63,104 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
+<input type="text" id="searchInput" placeholder="Cerca...">
+
+<select id="combobox" onchange="myFunction()">
+    @foreach (var sede in ViewBag.Seat)
+    {
+        <option value="@sede.Descrizione">@sede.Descrizione</option>
+    }
+
+</select>
+
+<script>
+
+    function myFunction() {                                             // this function is useful to change the svg image when we click on an option of the combobox.
+
+        var x = document.getElementById("combobox").value;
+        
        
-        $(document).ready(function () {
 
-         GetJsonViewbag();
+        var options = @Html.Raw(Json.Serialize(ViewBag.Seat));                    // Json string
 
-          
-            
-        });
-        function GetJsonViewbag(){
 
-            var comboBox = $("#comboBox");
-            var y = @Html.Raw(Json.Serialize(ViewBag.Seat));
+        options.forEach((item) => {                                          // foreach on options which has the model list values
 
-            $.each(y, function (index, value) {
-                comboBox.append($("<option>").text(value));
+            console.log(item.descrizione);                  // here we visualize the svg image
+            if (item.descrizione == x){
+                var fatherId= item.id;
+               document.getElementById("fatherId").value=fatherId;
+            }
 
         });
 
-        function myFunction() {                                             
+    }
+
+    $(document).ready(function () { // here we wait the complete load of the document
+        var comboBox = $("#combobox");
+
+        var searchInput = $("#searchInput");
+
+  
+        // execute the filter when the user types an input.
+        searchInput.on("input", function () {
+            var searchText = $(this).val().toLowerCase();
+
+            comboBox.find("option").each(function () {
+                var optionText = $(this).text().toLowerCase();
+                $(this).toggle(optionText.indexOf(searchText) > -1);
+            });
+        });
+
+
+
+        });
+
+</script>
+
+@*<script>
+
+    $(document).ready(function () {
+
+        GetJsonViewbag();
+    });
+
+    function GetJsonViewbag() {
+        var searchInput = $("searchInput");
+        var comboBox = $("#comboBox");
+        var y = @Html.Raw(Json.Serialize(ViewBag.Seat));
+
+        searchInput.on("input", function () {
+            var searchText = $(this).val().toLowerCase();
+
+            comboBox.find("option").each(function () {
+                var optionText = $(this).text().toLowerCase();
+                $(this).toggle(optionText.indexOf(searchText) > -1);
+            });
+        });
+
+
+        //$.each(y, function (index, value) {
+        //    comboBox.append($("<option>").text(value));
+
+        //});
+
+        function myFunction() {
 
             var x = document.getElementById("combobox").value;
-            
-           
 
             var options = @Html.Raw(Json.Serialize(ViewBag.Seat));                    // Json string
 
-
             options.forEach((item) => {                                          // foreach on options which has the model list values
 
-                if (item.descrizione == x) {
-                    var fatherId= item.Id;
-                    console.log(fatherId);
-                                 // this is the id of the father selected on the dropdown menu, so this the fatherId 
-                  // I have to set the fatherId of the new Sede
+                if (item.descrizione === x) {
+                    var IdPadre = item.Id;
+                    console.log(IdPadre);
+                    $('#IdPadre').val(IdPadre);
+                    console.log($('#IdPadre').val(IdPadre));
+
+                    // this is the id of the father selected on the dropdown menu, so this the fatherId
+                    // I have to set the fatherId of the new Sede
 
                 }
             });
@@ -98,5 +168,9 @@
         }
 
 
-    </script>
+        </script>*@
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+  
 }

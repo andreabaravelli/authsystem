@@ -78,7 +78,7 @@
         searchInput.on("input", function () {
             var searchText = $(this).val().toLowerCase();
 
-            comboBox.find("option").each(function () {
+           comboBox.find("option").each(function () {
                 var optionText = $(this).text().toLowerCase();
                 $(this).toggle(optionText.indexOf(searchText) > -1);
             });
