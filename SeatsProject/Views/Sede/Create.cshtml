@@ -75,25 +75,21 @@
 
 <script>
 
-    function myFunction() {                                             // this function is useful to change the svg image when we click on an option of the combobox.
+    function myFunction() {                                      // this function is used to take fatherId by the dropdown menu selection.
 
         var x = document.getElementById("combobox").value;
-        
-       
 
         var options = @Html.Raw(Json.Serialize(ViewBag.Seat));                    // Json string
 
-
         options.forEach((item) => {                                          // foreach on options which has the model list values
 
-            console.log(item.descrizione);                  // here we visualize the svg image
             if (item.descrizione == x){
+
                 var fatherId= item.id;
+
                document.getElementById("fatherId").value=fatherId;
             }
-
         });
-
     }
 
     $(document).ready(function () { // here we wait the complete load of the document
@@ -112,63 +108,9 @@
             });
         });
 
-
-
-        });
-
-</script>
-
-@*<script>
-
-    $(document).ready(function () {
-
-        GetJsonViewbag();
     });
 
-    function GetJsonViewbag() {
-        var searchInput = $("searchInput");
-        var comboBox = $("#comboBox");
-        var y = @Html.Raw(Json.Serialize(ViewBag.Seat));
-
-        searchInput.on("input", function () {
-            var searchText = $(this).val().toLowerCase();
-
-            comboBox.find("option").each(function () {
-                var optionText = $(this).text().toLowerCase();
-                $(this).toggle(optionText.indexOf(searchText) > -1);
-            });
-        });
-
-
-        //$.each(y, function (index, value) {
-        //    comboBox.append($("<option>").text(value));
-
-        //});
-
-        function myFunction() {
-
-            var x = document.getElementById("combobox").value;
-
-            var options = @Html.Raw(Json.Serialize(ViewBag.Seat));                    // Json string
-
-            options.forEach((item) => {                                          // foreach on options which has the model list values
-
-                if (item.descrizione === x) {
-                    var IdPadre = item.Id;
-                    console.log(IdPadre);
-                    $('#IdPadre').val(IdPadre);
-                    console.log($('#IdPadre').val(IdPadre));
-
-                    // this is the id of the father selected on the dropdown menu, so this the fatherId
-                    // I have to set the fatherId of the new Sede
-
-                }
-            });
-
-        }
-
-
-        </script>*@
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

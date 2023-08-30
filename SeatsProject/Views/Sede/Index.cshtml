@@ -11,16 +11,18 @@
  
 </p>
 
- <link
-      href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css"
-      rel="stylesheet"
-    />
+
 
      <script
       src="https://code.jquery.com/jquery-3.6.0.min.js"
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
       crossorigin="anonymous"
     ></script>
+    
+     <link
+      href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css"
+      rel="stylesheet"
+    />
 
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
@@ -49,8 +51,6 @@
     function myFunction() {                                             // this function is useful to change the svg image when we click on an option of the combobox.
   
   var x = document.getElementById("combobox").value;
-
-  document.getElementById("demo").innerHTML = "You selected: " + x;
 
      var options = @Html.Raw(Json.Serialize(Model));                    // Json string
     
@@ -84,7 +84,9 @@
             });
         });
 
-       function Book(postoSelezionato){// in this method we have to write the book
+    
+        
+        function Book(postoSelezionato){// in this method we have to write the book
               var x = document.getElementById("combobox").value;
        
               var options = @Html.Raw(Json.Serialize(Model));
@@ -154,7 +156,7 @@
         $('circle[id^="PS"]').on("click",function(){
             console.log("stai prenotando")
 
-               //$('#BookDate').datepicker();
+               $('#BookDate').datepicker();
 
                 $(".datefield").datepicker({
       dateFormat: 'dd-mm-yyyy',
