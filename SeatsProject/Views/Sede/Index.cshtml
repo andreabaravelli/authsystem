@@ -10,29 +10,14 @@
     <a asp-action="Create">Create New</a>
  
 </p>
+ <head>
+   
+     
+   <link href="https://code.jquery.com/ui/1.13.2/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+   
 
-
-
-     <script
-      src="https://code.jquery.com/jquery-3.6.0.min.js"
-      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-      crossorigin="anonymous"
-    ></script>
-    
-     <link
-      href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css"
-      rel="stylesheet"
-    />
-
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
-      integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-
-
-
+</head>
 <input type="text" id="searchInput" placeholder="Cerca...">
 
 <select id="combobox" onchange="myFunction()" >
@@ -66,13 +51,27 @@
 
     }
 
-   
-   
+    
+
     $(document).ready(function () { // here we wait the complete load of the document
+      var date1="";
+        updateDate();
+        
         var comboBox = $("#combobox");
        
         var searchInput = $("#searchInput");
+
+
+ function updateDate(){ // in this method we update the default date every time we run the program.
+        var timeElapsed = Date.now();
       
+           date1 = new Date(timeElapsed).toISOString().split("T")[0];
+      
+          const defaultDate = document.querySelector('input[type="date"]'); 
+      
+          defaultDate.value= date1;
+ }
+
       window.postoSelezionato=''; 
         // execute the filter when the user types an input.
         searchInput.on("input", function () {
@@ -83,11 +82,9 @@
                 $(this).toggle(optionText.indexOf(searchText) > -1);
             });
         });
-
     
-        
         function Book(postoSelezionato){// in this method we have to write the book
-              var x = document.getElementById("combobox").value;
+        
        
               var options = @Html.Raw(Json.Serialize(Model));
         
@@ -151,51 +148,22 @@
          
        });
 
-     
-
         $('circle[id^="PS"]').on("click",function(){
-            console.log("stai prenotando")
-
-               $('#BookDate').datepicker();
-
-                $(".datefield").datepicker({
-      dateFormat: 'dd-mm-yyyy',
-    numberOfMonths: 1,
-    }); 
-
-            var Date2  = $("#BookDate").datepicker("getDate");
-        console.log(Date2);
-            
-        if(Date2!=null){
-          
-           console.log(Date2);
+ 
+            let date = document.getElementById("BookDate").value;
+           
+        if(date!=date1){
+        
             window.postoSelezionato= $(this).attr('id');
            Book(window.postoSelezionato);
             
         }else{
                  console.log("devi scegliere un giorno prima di prenotare");
-                   console.log(Date2);
              }
 
        });
 
     });
-   
-
-//               $(function () {// datepicker
-//    $(".datefield").datepicker({
-//      dateFormat: 'dd-mm-yy',
-//    numberOfMonths: 1,
-//    onSelect: function(selected,evnt) {
-//         GetDate(selected);
-//    }
-//    }); 
-//    function GetDate(value){
-//         date = $('#BookDate').val(value);
-//        window.postoSelezionato='';
-//    }
-//});
-    
          
 </script>
 
@@ -229,8 +197,9 @@
     </table>
 
     <input class="datefield" data-val="true" data-val-required="Date is required" 
-      id="BookDate" name="BookDate" type="date" value="1/11/1989" />
+      id="BookDate" name="BookDate" type="date"  />
 
+   
 
 <div id="svgContainer">
 
