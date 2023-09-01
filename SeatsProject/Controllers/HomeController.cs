@@ -4,16 +4,21 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using SeatsProject.Models;
+    using System.Threading.Tasks;
+
+    using SeatsProject.repostiory_folder;
 
     public class HomeController : Controller
     {
         private readonly SeatsProjectContext _dbContext;
         private readonly ILogger<HomeController> _logger;
+        private readonly ILogin _loginUser;
 
-        public HomeController(ILogger<HomeController> logger, SeatsProjectContext dbContext)
+        public HomeController(/*ILogger<HomeController> logger, SeatsProjectContext dbContext,*/ILogin loguser)
         {
-            _logger = logger;
-            _dbContext = dbContext;
+           // _logger = logger;
+            //_dbContext = dbContext;
+            _loginUser = loguser;
         }
 
         public IActionResult Index()
@@ -24,17 +29,21 @@
         }
 
         [HttpPost]
-
-        public ActionResult Index(FormCollection form)
+        public ActionResult Index(string username, string passcode)
         {
 
-            ViewBag.YouSelected = form["Sedi"];
+          var issuccess = _loginUser.AuthenticateUser(username, passcode);
 
-            string selectedValues = form["Sedi"];
-
-            ViewBag.Countrieslist = ListaSedi(selectedValues.Split(','));
-
-            return View();
+          if (issuccess.Result!=null)
+            {
+                ViewBag.username = string.Format("successfully logged-in",username);
+                TempData["username"] = "lo user";
+                return RedirectToAction("Index","Layout");
+            }else
+            {
+                ViewBag.username = string.Format("Login failed", username);
+                return View();
+            }
         }
 
         public MultiSelectList ListaSedi(string[] selectedValues)
