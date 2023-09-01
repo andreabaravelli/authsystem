@@ -15,6 +15,7 @@
 
         public DbSet<Prenotazioni> Prenotazioni { get; set; }
 
+        public DbSet<UserLogin> UserLogin { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
