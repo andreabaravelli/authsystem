@@ -30,10 +30,48 @@
 
 <p id="demo"></p>
 
-<script>// function which converts the object list to a json object
-    var date="";
+<script>
+   
+     var date1="";
+     var contatore=0;
+    
+     function updateDate(){ // in this method we update the default date every time we run the program.
+      contatore+=1;
+       
+       const defaultDate = document.querySelector('input[type="date"]'); 
 
-    function myFunction() {                                             // this function is useful to change the svg image when we click on an option of the combobox.
+      if(contatore==1){
+        var timeElapsed = Date.now();
+      
+           date1 = new Date(timeElapsed).toISOString().split("T")[0];
+      
+        defaultDate.value= date1;
+
+        isWeekend(defaultDate.value);
+         }else{
+             isWeekend(defaultDate.value);
+         }
+ }
+
+ function createEvent(){
+     let data = document.querySelector('.datefield');
+      var event = new Event('change');
+     data.dispatchEvent(event);
+     
+ }
+
+ function isWeekend(date){
+     var milliseconds = Date.parse(date);
+     var selectedDate = new Date(milliseconds);
+    
+     if (selectedDate.toString().includes("Sat")|| selectedDate.toString().includes("Sun")){
+              alert("gli uffici di sabato e domenica sono chiusi, assicurarsi di selezionare un altro giorno per prenotare.");
+              document.querySelector('.datefield').value= null;
+     }
+      
+ }
+  
+ function myFunction() { // this function is useful to change the svg image when we click on an option of the combobox.
   
   var x = document.getElementById("combobox").value;
 
@@ -51,28 +89,19 @@
 
     }
 
-    
-
     $(document).ready(function () { // here we wait the complete load of the document
-      var date1="";
-        updateDate();
+     
+     createEvent();  
         
-        var comboBox = $("#combobox");
+        const comboBox = $("#combobox");
        
-        var searchInput = $("#searchInput");
-
-
- function updateDate(){ // in this method we update the default date every time we run the program.
-        var timeElapsed = Date.now();
-      
-           date1 = new Date(timeElapsed).toISOString().split("T")[0];
-      
-          const defaultDate = document.querySelector('input[type="date"]'); 
-      
-          defaultDate.value= date1;
- }
+        const searchInput = $("#searchInput");
 
       window.postoSelezionato=''; 
+
+       const dataElement= document.getElementById("BookDate");
+
+      
         // execute the filter when the user types an input.
         searchInput.on("input", function () {
             var searchText = $(this).val().toLowerCase();
@@ -84,8 +113,7 @@
         });
     
         function Book(postoSelezionato){// in this method we have to write the book
-        
-       
+
               var options = @Html.Raw(Json.Serialize(Model));
         
         options.forEach((item)=>{
@@ -131,11 +159,11 @@
                         {"data": "immagineSvg"},
                            {"data":null,
                     render: function(data,type,row){
-                        
+                        data= "delete";
                         var btn = '<button class="btn btn-primary delete-button" >' + data + '</button>';
                                 
                                 $(document).on('click','.delete-button',function(){
-                                    console.log("ciao");
+                                    
                                     // $("#SediTable").row( this ).delete();
                                      var row = $('#SediTable').DataTable().row($(this).closest('tr'));
                                      row.remove().draw();
@@ -146,22 +174,20 @@
             }
           ],
          
-       });
+       });// end of datatable ajax call
 
         $('circle[id^="PS"]').on("click",function(){
  
-            let date = document.getElementById("BookDate").value;
+            //let date = document.getElementById("BookDate").value;
+            //let date = document.getElementById("BookDate").value.getDay();
            
-        if(date!=date1){
-        
+            console.log("stai prenotando")
             window.postoSelezionato= $(this).attr('id');
            Book(window.postoSelezionato);
             
-        }else{
-                 console.log("devi scegliere un giorno prima di prenotare");
-             }
+       
 
-       });
+       });// end of click event
 
     });
          
@@ -197,7 +223,7 @@
     </table>
 
     <input class="datefield" data-val="true" data-val-required="Date is required" 
-      id="BookDate" name="BookDate" type="date"  />
+      id="BookDate" name="BookDate" type="date" onchange="updateDate()"  />
 
    
 
