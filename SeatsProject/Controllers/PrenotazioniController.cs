@@ -21,6 +21,13 @@
         }
 
         // GET: Prenotazioni
+
+        public void GetDayReservations(DateTime date)
+        {
+            var lstDayReservations = _context.Prenotazioni.Where(p => p.Data == date);
+            ViewBag.DayReservations = lstDayReservations;
+        }
+
         public void Reserve(Prenotazioni prenotazione)
         {
             var available = BookCheck(prenotazione);
@@ -34,6 +41,7 @@
             }
             else
             {
+                Console.Error.WriteLine("questo posto è già stato prenotato per questa data.");
                 // dovrei fare in modo di mandare un messaggio di errore per dire che questo posto è già prenotato per la data selezionata.
             }
         }

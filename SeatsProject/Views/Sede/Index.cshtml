@@ -51,6 +51,7 @@
          }else{
              isWeekend(defaultDate.value);
          }
+         DayState(defaultDate.value);
  }
 
  function createEvent(){
@@ -86,6 +87,22 @@
        } 
       });
 
+    }
+
+     function DayState(date){// here we want to fill the seats with a color red or green or blue using a list of books passed as a viewbag.
+           $.ajax({
+            type: "POST",
+            
+            url: '@Url.Action("GetDayReservations", "Prenotazioni")',
+            data:date,
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+
+        });
+        // qui devo usare il Viewbag.dayreservations per avere le prenotazioni del giorno e riuscire a cambiare i colori dei posti.
+    @foreach ( var ciao in ViewBag.dayReservations)
+    {
+        
+    }
     }
 
     $(document).ready(function () { // here we wait the complete load of the document
@@ -185,8 +202,10 @@
           //  alert("sei sicuro di voler prenotare "+ $(this).attr('id') + " nella data "+ dataElement.value"?");
            Book(window.postoSelezionato,dataElement.value);
             
+
        });// end of click event
 
+      
     });
          
 </script>
