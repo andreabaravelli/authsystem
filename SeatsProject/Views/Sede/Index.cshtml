@@ -101,7 +101,6 @@
 
        const dataElement= document.getElementById("BookDate");
 
-      
         // execute the filter when the user types an input.
         searchInput.on("input", function () {
             var searchText = $(this).val().toLowerCase();
@@ -112,31 +111,36 @@
             });
         });
     
-        function Book(postoSelezionato){// in this method we have to write the book
+        function Book(postoSelezionato,date){// in this method we have to write the book
 
               var options = @Html.Raw(Json.Serialize(Model));
         
         options.forEach((item)=>{
            
             if(item.codiceArea== postoSelezionato ){
+               
+                var prenotazione = {
+                    IdPrenotazine:null,
+                    Data:date,
+                    Utente: "utente1", // questo deve essere non null mi servirebbe dalla tabella del login
+                    CodicePostazione:postoSelezionato
+                };
+                SendData(prenotazione);
 
-                SendData(item);
-
-                 console.log("hai prenotato "+ item.descrizione);
             }
            
         });
 
        }
 
-       function SendData(item){// here we send the data at the controller 
+       function SendData(prenotazione){// here we send the data at the controller devo trasformarlo in un oggetto
 
         debugger;
         $.ajax({
             type: "POST",
             
             url: '@Url.Action("Reserve", "Prenotazioni")',
-            data:  item,
+            data:  prenotazione,
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 
         });
@@ -178,21 +182,15 @@
 
         $('circle[id^="PS"]').on("click",function(){
  
-            //let date = document.getElementById("BookDate").value;
-            //let date = document.getElementById("BookDate").value.getDay();
-           
             console.log("stai prenotando")
             window.postoSelezionato= $(this).attr('id');
-           Book(window.postoSelezionato);
+           Book(window.postoSelezionato,dataElement.value);
             
-       
-
        });// end of click event
 
     });
          
 </script>
-
 
     <table id="SediTable" class="display" style="width:100%">
         <thead>
@@ -223,9 +221,7 @@
     </table>
 
     <input class="datefield" data-val="true" data-val-required="Date is required" 
-      id="BookDate" name="BookDate" type="date" onchange="updateDate()"  />
-
-   
+      id="BookDate" name="BookDate" type="date" onchange="updateDate()"  />   
 
 <div id="svgContainer">
 

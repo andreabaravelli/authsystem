@@ -17,5 +17,7 @@
         public string Utente { get; set; }
 
         public string CodicePostazione { get; set; }
+
+        public string CodicePrenotazione { get; set; }
     }
 }

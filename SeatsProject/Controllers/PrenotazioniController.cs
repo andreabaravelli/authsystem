@@ -12,6 +12,7 @@
     public class PrenotazioniController : Controller
     {
         private readonly SeatsProjectContext _context;
+        private string[] caratteri = new string[]{"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9" };
 
         public PrenotazioniController(SeatsProjectContext context)
         {
@@ -19,24 +20,33 @@
         }
 
         // GET: Prenotazioni
-        public IActionResult Reserve(Sede item)
+        public void Reserve(Prenotazioni prenotazione)
         {
-         // qui bisogna aggiungere al database la prenotazione.
-         Prenotazioni prenotazione = new Prenotazioni();
-         prenotazione.CodicePostazione = item.CodiceArea;
+            // qui bisogna aggiungere al database la prenotazione. si può fare passando al metodo una struct in javascript
+
+            GetIdPrenotazione(prenotazione);
 
             // devo aggiungere la data e l'utente
-         _context.Add(prenotazione);
-         _context.SaveChanges();
+            _context.Add(prenotazione);
+            _context.SaveChanges(); 
+        }
 
-         return View();
+        public void GetIdPrenotazione(Prenotazioni prenotazione)
+        {
+            string IdPrenotazione = string.Empty;
+            for (int i=0; i<16; i++)
+            {
+                Random rnd = new Random(); int indice = rnd.Next(0,caratteri.Length);
+                IdPrenotazione += caratteri[indice];
+            }
+            prenotazione.CodicePrenotazione = IdPrenotazione;
         }
 
         public async Task<IActionResult> Index()
         {
-              return _context.Prenotazioni != null ?
-                          View(await _context.Prenotazioni.ToListAsync()) :
-                          Problem("Entity set 'SeatsProjectContext.Prenotazioni'  is null.");
+            return _context.Prenotazioni != null ?
+                        View(await _context.Prenotazioni.ToListAsync()) :
+                        Problem("Entity set 'SeatsProjectContext.Prenotazioni'  is null.");
         }
 
         // GET: Prenotazioni/Details/5
@@ -163,14 +173,14 @@
             {
                 _context.Prenotazioni.Remove(prenotazioni);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PrenotazioniExists(int id)
         {
-          return (_context.Prenotazioni?.Any(e => e.IdPrenotazine == id)).GetValueOrDefault();
+            return (_context.Prenotazioni?.Any(e => e.IdPrenotazine == id)).GetValueOrDefault();
         }
     }
 }
