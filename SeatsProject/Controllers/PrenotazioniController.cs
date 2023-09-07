@@ -7,12 +7,13 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Query.Internal;
     using SeatsProject.Models;
 
     public class PrenotazioniController : Controller
     {
         private readonly SeatsProjectContext _context;
-        private string[] caratteri = new string[]{"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9" };
+        private string[] caratteri = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
         public PrenotazioniController(SeatsProjectContext context)
         {
@@ -22,24 +23,52 @@
         // GET: Prenotazioni
         public void Reserve(Prenotazioni prenotazione)
         {
-            // qui bisogna aggiungere al database la prenotazione. si può fare passando al metodo una struct in javascript
+            var available = BookCheck(prenotazione);
+            if (available)
+            {
+                GetIdPrenotazione(prenotazione);
 
-            GetIdPrenotazione(prenotazione);
-
-            // devo aggiungere la data e l'utente
-            _context.Add(prenotazione);
-            _context.SaveChanges(); 
+                // devo aggiungere la data e l'utente
+                _context.Prenotazioni.Add(prenotazione);
+                _context.SaveChanges();
+            }
+            else
+            {
+                // dovrei fare in modo di mandare un messaggio di errore per dire che questo posto è già prenotato per la data selezionata.
+            }
         }
 
-        public void GetIdPrenotazione(Prenotazioni prenotazione)
+        public bool BookCheck(Prenotazioni prenotazione)// this method is useful to check if already exists an book of a specific seat in a specific date.
+        {
+            var postoOccupato = _context.Prenotazioni.FirstOrDefault(m => m.Data == prenotazione.Data && m.CodicePostazione == prenotazione.CodicePostazione);
+            var SeatAvailable = true;
+            if (postoOccupato == null)
+            {
+                return SeatAvailable;
+            }
+            else
+            {
+                return !SeatAvailable;
+            }
+        }
+
+        public void GetIdPrenotazione(Prenotazioni prenotazione) // here we create a unique IdPrenotazione for every book and we add it at teh list to control all. 
         {
             string IdPrenotazione = string.Empty;
-            for (int i=0; i<16; i++)
+            for (int i = 0; i < 16; i++)
             {
-                Random rnd = new Random(); int indice = rnd.Next(0,caratteri.Length);
+                Random rnd = new Random(); int indice = rnd.Next(0, caratteri.Length);
                 IdPrenotazione += caratteri[indice];
             }
+
+            var uniqueId= _context.Prenotazioni.FirstOrDefault(Id => Id.CodicePrenotazione == IdPrenotazione);
+            if (uniqueId == null) { 
             prenotazione.CodicePrenotazione = IdPrenotazione;
+            }
+            else
+            {
+                GetIdPrenotazione(prenotazione);
+            }
         }
 
         public async Task<IActionResult> Index()
