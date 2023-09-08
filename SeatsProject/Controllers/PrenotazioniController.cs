@@ -24,14 +24,17 @@
 
         public void GetDayReservations(DateTime date)
         {
-            var lstDayReservations = _context.Prenotazioni.Where(p => p.Data == date);
+            var lstDayReservations = _context.Prenotazioni.Where(p => p.Data == date).ToList();
+            var lstBookableSeats = _context.Sedi.Where(p => p.Prenotabile == true).ToList();
             ViewBag.DayReservations = lstDayReservations;
+            ViewBag.BookableSeats = lstBookableSeats;
         }
 
         public void Reserve(Prenotazioni prenotazione)
         {
-            var available = BookCheck(prenotazione);
-            if (available)
+            var alreadyReservedASeat = OneReservationForDayCheck(prenotazione.Utente, prenotazione.Data);
+            var available = AvailabilityCheck(prenotazione);
+            if (available && !alreadyReservedASeat) // here we check if the seat is available and you haven't done any reservation for this day yet.
             {
                 GetIdPrenotazione(prenotazione);
 
@@ -41,12 +44,50 @@
             }
             else
             {
-                Console.Error.WriteLine("questo posto è già stato prenotato per questa data.");
+                if (!available && alreadyReservedASeat) // here we check if the seat is not available and you have already done a reservation for this day.
+                {
+                    CheckAndDiscardReservation(prenotazione);
+                }
+                else
+                {
+                    if (!available || alreadyReservedASeat)
+                    {
+                        ViewBag.ErrorMessage = "questo posto è già stato prenotato per questa data oppure hai già prenotato un posto per la data di oggi.";
+                        Console.Error.WriteLine("questo posto è già stato prenotato per questa data oppure hai già prenotato un posto per la data di oggi.");
+
+                    }
+                }
+
                 // dovrei fare in modo di mandare un messaggio di errore per dire che questo posto è già prenotato per la data selezionata.
             }
         }
 
-        public bool BookCheck(Prenotazioni prenotazione)// this method is useful to check if already exists an book of a specific seat in a specific date.
+        public void CheckAndDiscardReservation(Prenotazioni prenotazione) // here we discard the reservation from the DB if the seat clicked by the user is not available that day and has been booked from the user himself.
+        {
+            var MiaPrenotazione = _context.Prenotazioni.FirstOrDefault(p => p.Data == prenotazione.Data && p.Utente == prenotazione.Utente && p.CodicePostazione == prenotazione.CodicePostazione);
+            if (MiaPrenotazione != null)
+            {
+                _context.Prenotazioni.Remove(MiaPrenotazione);
+                _context.SaveChanges();
+            }
+        }
+
+        public bool OneReservationForDayCheck(string user, DateTime date) // here we check that the user hasn't already made a reservation for that day
+        {
+            var reservation = _context.Prenotazioni.FirstOrDefault(p => p.Data == date && p.Utente == user);
+            var alreadyReserved = true;
+            if (reservation == null)
+            {
+                return !alreadyReserved;
+            }
+            else
+            {
+                return alreadyReserved;
+            }
+
+        }
+
+        public bool AvailabilityCheck(Prenotazioni prenotazione)// this method is useful to check if already exists an book of a specific seat in a specific date.
         {
             var postoOccupato = _context.Prenotazioni.FirstOrDefault(m => m.Data == prenotazione.Data && m.CodicePostazione == prenotazione.CodicePostazione);
             var SeatAvailable = true;
@@ -69,9 +110,10 @@
                 IdPrenotazione += caratteri[indice];
             }
 
-            var uniqueId= _context.Prenotazioni.FirstOrDefault(Id => Id.CodicePrenotazione == IdPrenotazione);
-            if (uniqueId == null) { 
-            prenotazione.CodicePrenotazione = IdPrenotazione;
+            var uniqueId = _context.Prenotazioni.FirstOrDefault(Id => Id.CodicePrenotazione == IdPrenotazione);
+            if (uniqueId == null)
+            {
+                prenotazione.CodicePrenotazione = IdPrenotazione;
             }
             else
             {

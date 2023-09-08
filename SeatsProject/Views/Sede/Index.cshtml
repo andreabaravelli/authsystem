@@ -98,12 +98,29 @@
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 
         });
+        // il pezzo di codice commentato non ha molto senso perchè si deve poter fare solo una prenotazione per giorno.
+
         // qui devo usare il Viewbag.dayreservations per avere le prenotazioni del giorno e riuscire a cambiare i colori dei posti.
-    @foreach ( var ciao in ViewBag.dayReservations)
-    {
-        
-    }
-    }
+             @foreach( var postoPrenotabile in ViewBag.BookableSeats)
+             {
+        var isReserved = false;
+
+                @foreach ( var prenotazione in ViewBag.DayReservations)             // devo fare anche un foreach per tutti i posti prenotabili
+                {
+            if(postoPrenotabile.CodiceArea == prenotazione.CodicePostazione /* e il nome utente non è il tuo*/)
+            {
+                isReserved = true;
+                // colora di rosso il cerchio
+            }
+            else
+            {
+               
+            }
+            // devo cambiare il colore dell'elemento circle a blu
+                }
+    
+             }
+     }
 
     $(document).ready(function () { // here we wait the complete load of the document
      
@@ -138,7 +155,7 @@
                 var prenotazione = {
                     IdPrenotazine:null,
                     Data:date,
-                    Utente: "utente1", // questo deve essere non null mi servirebbe dalla tabella del login
+                    Utente: "utente1", // questo deve essere non null! mi servirebbe dalla tabella del login
                     CodicePostazione:postoSelezionato
                 };
                 SendData(prenotazione);
@@ -159,7 +176,12 @@
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 
         });
-}
+        
+    @if (ViewBag.ErrorMessage != null)          // questo è un po' da sistemare.
+    {
+        @Console.Write(ViewBag.ErrorMessage);
+    }
+  }
 
        $('#SediTable').DataTable({
                   
