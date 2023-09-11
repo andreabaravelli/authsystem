@@ -22,7 +22,7 @@
         }
 
         // GET: Sede
-        public IActionResult Index(int? IdPadre = null)
+        public IActionResult Index( int? IdPadre = null)
         {
 
             if (IdPadre == null)

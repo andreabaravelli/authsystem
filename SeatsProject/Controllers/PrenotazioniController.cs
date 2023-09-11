@@ -22,12 +22,13 @@
 
         // GET: Prenotazioni
 
-        public void GetDayReservations(DateTime date)
+        public IActionResult GetDayReservations(DateTime date)
         {
-            var lstDayReservations = _context.Prenotazioni.Where(p => p.Data == date).ToList();
-            var lstBookableSeats = _context.Sedi.Where(p => p.Prenotabile == true).ToList();
-            ViewBag.DayReservations = lstDayReservations;
-            ViewBag.BookableSeats = lstBookableSeats;
+            var lstDayReservations = _context.Prenotazioni.Where(p => p.Data == date);
+            var lstBookableSeats = _context.Sedi.Where(p => p.Prenotabile == true);
+            //var lstUser = _context.Login.Where();
+
+            return Json(new { data = lstDayReservations });
         }
 
         public void Reserve(Prenotazioni prenotazione)
